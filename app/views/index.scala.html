@@ -2,6 +2,17 @@
 
 @main("Welcome to Play") {
 
-    @play20.welcome(message, style = "Java")
+    <script type="text/javascript" charset="utf-8">
 
+    var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
+
+    console.log("@routes.Application.wsmessage.webSocketURL(request)")
+    var socket = new WS("@routes.Application.wsmessage.webSocketURL(request)")
+
+    var receiveEvent = function(event){
+    console.log(event.data)
+    }
+
+    socket.onmessage = receiveEvent
+    </script>
 }
