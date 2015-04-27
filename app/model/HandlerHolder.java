@@ -40,7 +40,7 @@ public class HandlerHolder implements MessageHandler {
 		messageHandlers = new ArrayList<MessageHandler>() {
 			{
 				add(new JedisPubHandler());
-				add(new WebSocketHandler(WsOutPool.getInstance()));
+				add(new WebSocketHandler(SimpleWsOutPool.getInstance()));
 			}
 		};
 	}

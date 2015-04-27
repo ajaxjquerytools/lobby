@@ -1,6 +1,6 @@
 package controllers;
 
-import model.WsOutPool;
+import model.SimpleWsOutPool;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -38,12 +38,12 @@ public class Application extends Controller {
 			// Called when the Websocket Handshake is done.
 			public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
 				// Join the chat room.
-				in.onClose(() -> WsOutPool.getInstance().remove(out));
+				in.onClose(() -> SimpleWsOutPool.getInstance().unregister(out));
 
 				try {
 					//Subscribe to Redis channel; to receive a message
 					System.out.println("Im ready ws=" + ws.incrementAndGet());
-					WsOutPool.getInstance().add(out);
+					SimpleWsOutPool.getInstance().register(out);
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
