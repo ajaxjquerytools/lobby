@@ -1,24 +1,18 @@
 var viewModel = {
-    currentUser: new UIUser(),
-    events: ko.observableArray(),
-    citySearch: ko.observable(),
+    messages: new ko.observableArray(),
+    eventDispatcher: new EventDispatcher(),
 
-    onAuth: function (response) {
+    registerEventHandlers: function () {
         var that = this;
-        //this.performAuth(response);
-        this.getFBUserDetails("me", this.currentUser);
-    },
-    getFBUserDetails: function (fbId, userToPopulate) {
-        FbUtils.getFBUserDetails(fbId, userToPopulate);
-    },
-    getSocialEvents: function(){
-        FbUtils.getEventsByCity(this);
-    },
-    showMap: function(){
-        $("#googleMap").modal('show');
+        this.eventDispatcher.register(
+            "MESSAGE",
+            function (event) {
+                console.log("MESSAGE" + event.data);
+                that.messages.push(event.data);
+            }
+        );
     }
-
-
 }
 
 ko.applyBindings(viewModel, $('html')[0]);
+viewModel.registerEventHandlers();

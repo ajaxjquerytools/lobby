@@ -4,12 +4,8 @@
     <h3>Messages received</h3>
 
     <div class = "container">
-        <ul class="list-group">
-            <li class="list-group-item">Cras justo odio</li>
-            <li class="list-group-item">Dapibus ac facilisis in</li>
-            <li class="list-group-item">Morbi leo risus</li>
-            <li class="list-group-item">Porta ac consectetur ac</li>
-            <li class="list-group-item">Vestibulum at eros</li>
+        <ul class="list-group" data-bind="foreach: messages">
+            <li class="list-group-item" data-bind="text: $data"></li>
         </ul>
     </div>
 
@@ -20,10 +16,8 @@
     console.log("@routes.Application.wsmessage.webSocketURL(request)")
     var socket = new WS("@routes.Application.wsmessage.webSocketURL(request)")
 
-    var receiveEvent = function(event){
-    console.log(event.data)
+    socket.onmessage = function(event){
+            viewModel.eventDispatcher.dispatch(event)
     }
-
-    socket.onmessage = receiveEvent
     </script>
 }
