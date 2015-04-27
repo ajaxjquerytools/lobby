@@ -1,4 +1,4 @@
-package comp;
+package model;
 
 public interface MessageHandler {
 	public static final String CHANNEL_NAME = "message_channel";

@@ -1,4 +1,4 @@
-package comp;
+package model;
 
 import java.util.LinkedList;
 import java.util.List;

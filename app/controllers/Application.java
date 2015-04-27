@@ -1,6 +1,6 @@
 package controllers;
 
-import comp.WsOutPool;
+import model.WsOutPool;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -8,7 +8,7 @@ import play.mvc.WebSocket;
 import views.html.index;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import comp.HandlerHolder;
+import model.HandlerHolder;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
