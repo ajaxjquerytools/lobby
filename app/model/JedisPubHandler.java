@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import redis.clients.jedis.Jedis;
 import utils.JedisUtil;
 /**
@@ -8,11 +9,11 @@ import utils.JedisUtil;
 public class JedisPubHandler implements MessageHandler {
 
 	@Override
-	public void send(String message) {
+	public void send(JsonNode message) {
 		System.out.println("Publisher | sending msg to channel");
 		Jedis jedis = JedisUtil.getJedisResource();
 		try {
-			jedis.publish(CHANNEL_NAME, message);
+			jedis.publish(CHANNEL_NAME, message.asText());
 		} finally {
 			JedisUtil.returnJedisResource(jedis);
 		}

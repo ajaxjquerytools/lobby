@@ -8,7 +8,7 @@ import play.mvc.WebSocket;
 import views.html.index;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import model.HandlerHolder;
+import model.HandlerPool;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,14 +21,14 @@ public class Application extends Controller {
 
 	@BodyParser.Of(BodyParser.Json.class)
 	public static Result message() {
-		JsonNode json = request().body().asJson();
-		String message = json.findPath("message").textValue();
+		JsonNode jsonData = request().body().asJson();
+		String message = jsonData.findPath("message").textValue();
 
 		if (message == null) {
 			return badRequest("Missing parameter [message]");
 		}
 
-		HandlerHolder.getInstance().send(message);
+		HandlerPool.getInstance().send(jsonData);
 		return ok();
 	}
 
@@ -48,10 +48,6 @@ public class Application extends Controller {
 					ex.printStackTrace();
 				}
 			}
-
 		};
 	}
-
-
-
 }

@@ -6,6 +6,6 @@ import play.mvc.WebSocket;
  */
 public interface WebSocketPool<T> {
 	void register(WebSocket.Out<T> out);
-	void unregister(WebSocket.Out<String> out);
+	void unregister(WebSocket.Out<T> out);
 	void notifyMembers(T message);
 }

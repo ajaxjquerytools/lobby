@@ -3,9 +3,12 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
-import play.mvc.WebSocket;
-
 import com.fasterxml.jackson.databind.JsonNode;
+import model.domain.Event;
+import model.domain.StatusResponse;
+import model.domain.WsMessage;
+import play.libs.Json;
+import play.mvc.WebSocket;
 
 public class SimpleWsOutPool implements WebSocketPool<JsonNode> {
 
@@ -26,7 +29,7 @@ public class SimpleWsOutPool implements WebSocketPool<JsonNode> {
 
 	@Override
 	public void notifyMembers(JsonNode message) {
-		wsList.forEach(ws -> ws.write(message));
+		wsList.forEach(ws -> ws.write(Json.toJson(new WsMessage<>(Event.MESSAGE, StatusResponse.OK, message))));
 	}
 
 	@Override

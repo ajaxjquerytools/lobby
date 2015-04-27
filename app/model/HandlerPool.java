@@ -1,6 +1,7 @@
 package model;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import play.libs.Akka;
 import redis.clients.jedis.Jedis;
 import scala.concurrent.duration.Duration;
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class HandlerHolder implements MessageHandler {
+public class HandlerPool implements MessageHandler {
 
-	private static HandlerHolder handlerHolder;
+	private static HandlerPool handlerPool;
 
 	static {
 		//subscribe to the message channel
@@ -27,16 +28,16 @@ public class HandlerHolder implements MessageHandler {
 	}
 
 
-	public synchronized static HandlerHolder getInstance() {
-		if (handlerHolder == null) {
-			handlerHolder = new HandlerHolder();
+	public synchronized static HandlerPool getInstance() {
+		if (handlerPool == null) {
+			handlerPool = new HandlerPool();
 		}
-		return handlerHolder;
+		return handlerPool;
 	}
 
 	private List<MessageHandler> messageHandlers;
 
-	public HandlerHolder() {
+	public HandlerPool() {
 		messageHandlers = new ArrayList<MessageHandler>() {
 			{
 				add(new JedisPubHandler());
@@ -46,7 +47,7 @@ public class HandlerHolder implements MessageHandler {
 	}
 
 	@Override
-	public void send(String message) {
-		messageHandlers.forEach(h -> h.send(message));
+	public void send(JsonNode jsonData) {
+		messageHandlers.forEach(h -> h.send(jsonData));
 	}
 }

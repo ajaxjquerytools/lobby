@@ -1,7 +1,6 @@
 package model;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import play.libs.Json;
+import com.fasterxml.jackson.databind.JsonNode;
 public class WebSocketHandler implements MessageHandler {
 
 	public SimpleWsOutPool wsOutPool;
@@ -11,10 +10,7 @@ public class WebSocketHandler implements MessageHandler {
 	}
 
 	@Override
-	public void send(String  message) {
-
-		ObjectNode event = Json.newObject();
-		event.put("message", message);
-		wsOutPool.notifyMembers(event);
+	public void send(JsonNode jsonData) {
+		wsOutPool.notifyMembers(jsonData);
 	}
 }
