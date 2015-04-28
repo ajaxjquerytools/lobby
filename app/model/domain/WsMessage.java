@@ -10,6 +10,7 @@ public class WsMessage<T> {
 		this.type = type;
 		this.status = status;
 		this.eventData = eventData;
+		//this.host = play.
 	}
 
 	public Event getType() {

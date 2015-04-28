@@ -38,7 +38,10 @@ public class Application extends Controller {
 			// Called when the Websocket Handshake is done.
 			public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
 				// Join the chat room.
-				in.onClose(() -> SimpleWsOutPool.getInstance().unregister(out));
+				in.onClose(() -> {
+					    System.out.println("UNREGISTERING WS...");
+						SimpleWsOutPool.getInstance().unregister(out);
+				});
 
 				try {
 					//Subscribe to Redis channel; to receive a message

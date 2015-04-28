@@ -6,11 +6,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 import utils.JedisUtil;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class RedisSub extends JedisPubSub {
-
-	private static AtomicInteger keyNum = new AtomicInteger(0);
 
 	private static Logger logger = LoggerFactory.getLogger(RedisSub.class);
 
@@ -18,11 +14,9 @@ public class RedisSub extends JedisPubSub {
 	public void onMessage(String channel, String message) {
 		System.out.println(String.format("Message received. Channel: %s, Msg: %s",channel,message));
 		logger.info("Message received. Channel: {}, Msg: {}", channel, message);
-
-		int counterNum = keyNum.incrementAndGet();
-		String key = "key" + counterNum;
 		Jedis j = JedisUtil.getJedisResource();
 		try {
+			String key = j.randomKey();
 			j.set(key, message);
 			System.out.println("Redis | key=" + key + ";value=" + j.get(key));
 		} finally {

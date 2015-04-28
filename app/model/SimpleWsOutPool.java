@@ -3,12 +3,13 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import model.domain.Event;
 import model.domain.StatusResponse;
 import model.domain.WsMessage;
 import play.libs.Json;
 import play.mvc.WebSocket;
+
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class SimpleWsOutPool implements WebSocketPool<JsonNode> {
 

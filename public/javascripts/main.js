@@ -8,7 +8,7 @@ var viewModel = {
             "MESSAGE",
             function (event) {
                 var jsonData = JSON.parse(event.data);
-                that.messages.push(jsonData.eventData.message.toString()    );
+                that.messages.push(jsonData.eventData.message.toString());
             }
         );
     }
