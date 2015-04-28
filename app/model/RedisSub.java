@@ -16,6 +16,9 @@ public class RedisSub extends JedisPubSub {
 		logger.info("Message received. Channel: {}, Msg: {}", channel, message);
 		Jedis j = JedisUtil.getJedisResource();
 		try {
+			/**
+			 * multinode support
+			 */
 			String key = j.randomKey();
 			j.set(key, message);
 			System.out.println("Redis | key=" + key + ";value=" + j.get(key));

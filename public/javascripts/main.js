@@ -8,7 +8,9 @@ var viewModel = {
             "MESSAGE",
             function (event) {
                 var jsonData = JSON.parse(event.data);
-                that.messages.push(jsonData.eventData.message.toString());
+                jsonData.time = new Date();
+                //put to the front; so new messages will be appear in the top of list
+                that.messages.unshift(jsonData);
             }
         );
     }
