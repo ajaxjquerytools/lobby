@@ -13,13 +13,12 @@
 
     <script type="text/javascript" charset="utf-8">
 
-    var WS = window['MozWebSocket'] ? MozWebSocket : WebSocket
-
     console.log("@routes.Application.wsmessage.webSocketURL(request)")
-    var socket = new WS("@routes.Application.wsmessage.webSocketURL(request)")
 
-    socket.onmessage = function(event){
+    var ws = new ReconnectingWebSocket("@routes.Application.wsmessage.webSocketURL(request)")
+    ws.onmessage = function(event){
             viewModel.eventDispatcher.dispatch(event)
     }
+
     </script>
 }
