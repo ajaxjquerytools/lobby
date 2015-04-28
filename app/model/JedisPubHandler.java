@@ -13,7 +13,7 @@ public class JedisPubHandler implements MessageHandler {
 		System.out.println("Publisher | sending msg to channel");
 		Jedis jedis = JedisUtil.getJedisResource();
 		try {
-			jedis.publish(CHANNEL_NAME, message.asText());
+			jedis.publish(CHANNEL_NAME, message.toString());
 		} finally {
 			JedisUtil.returnJedisResource(jedis);
 		}
