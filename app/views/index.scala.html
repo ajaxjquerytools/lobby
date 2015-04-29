@@ -4,7 +4,7 @@
     <div class = "container">
         <h4>Messages received:</h4>
         <ul class="list-group" data-bind="foreach: messages">
-            <li class="list-group-item small" style="padding: 0px">
+            <li class="list-group-item small">
                 <span class="col-lg-2" data-bind="text: $data.time.toLocaleTimeString()"></span>
                 <span class="col-lg-8" data-bind="text: JSON.stringify($data.eventData)"></span>
             </li>

@@ -1,7 +1,8 @@
-package model;
+package model.handlers;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import model.domain.Event;
 import model.domain.StatusResponse;
@@ -11,9 +12,9 @@ import play.mvc.WebSocket;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class SimpleWsOutPool implements WebSocketPool<JsonNode> {
+public class SimpleWsOutPool implements WebSocketPool<String> {
 
-	private List<WebSocket.Out<JsonNode>> wsList;
+	private LinkedBlockingQueue<WebSocket.Out<JsonNode>> wsList;
 
 	private static SimpleWsOutPool members;
 
@@ -25,12 +26,12 @@ public class SimpleWsOutPool implements WebSocketPool<JsonNode> {
 	}
 
 	private SimpleWsOutPool() {
-		this.wsList = new LinkedList<>();
+		this.wsList = new LinkedBlockingQueue<>();
 	}
 
 	@Override
-	public void notifyMembers(JsonNode message) {
-		wsList.forEach(ws -> ws.write(Json.toJson(new WsMessage<>(Event.MESSAGE, StatusResponse.OK, message))));
+	public void notifyMembers(String message) {
+		wsList.forEach(ws -> ws.write(Json.toJson(new WsMessage<>(Event.MESSAGE, StatusResponse.OK, Json.parse(message)))));
 	}
 
 	@Override

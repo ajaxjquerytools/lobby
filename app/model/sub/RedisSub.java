@@ -1,4 +1,4 @@
-package model;
+package model.sub;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +13,7 @@ public class RedisSub extends JedisPubSub {
 
 	@Override
 	public void onMessage(String channel, String message) {
-		System.out.println(String.format("Message received. Channel: %s, Msg: %s",channel,message));
-		logger.info("Message received. Channel: {}, Msg: {}", channel, message);
+		System.out.println(String.format("Redis | message received. Channel: %s, Msg: %s", channel, message));
 		Jedis j = JedisUtil.getJedisResource();
 		try {
 			/**

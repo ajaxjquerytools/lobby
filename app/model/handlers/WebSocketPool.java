@@ -1,4 +1,4 @@
-package model;
+package model.handlers;
 
 import play.mvc.WebSocket;
 /**
