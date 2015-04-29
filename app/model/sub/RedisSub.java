@@ -14,17 +14,12 @@ public class RedisSub extends JedisPubSub {
 	@Override
 	public void onMessage(String channel, String message) {
 		System.out.println(String.format("Redis | message received. Channel: %s, Msg: %s", channel, message));
-		Jedis j = JedisUtil.getJedisResource();
-		try {
-			/**
-			 * multinode support
-			 */
+		JedisUtil.doJedisCall(j -> {
+			//multinode support
 			String key = j.randomKey();
 			j.set(key, message);
 			System.out.println("Redis | key=" + key + ";value=" + j.get(key));
-		} finally {
-			JedisUtil.returnJedisResource(j);
-		}
+		});
 	}
 
 	@Override

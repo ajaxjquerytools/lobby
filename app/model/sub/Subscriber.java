@@ -4,7 +4,6 @@ import java.util.concurrent.TimeUnit;
 
 import model.handlers.MessageHandler;
 import play.libs.Akka;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 import scala.concurrent.duration.Duration;
 import utils.JedisUtil;
@@ -19,12 +18,7 @@ public class Subscriber {
 
 	public static void subscribeToChanel(JedisPubSub jedisPubSub, String chanel) {
 		Akka.system().scheduler().scheduleOnce(Duration.create(10, TimeUnit.MILLISECONDS), () -> {
-			Jedis j = JedisUtil.getJedisResource();
-			try {
-				j.subscribe(jedisPubSub, chanel);
-			} finally {
-				JedisUtil.returnJedisResource(j);
-			}
+			JedisUtil.doJedisCall(j -> j.subscribe(jedisPubSub, chanel));
 		}, Akka.system().dispatcher());
 	}
 }
