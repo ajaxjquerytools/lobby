@@ -2,11 +2,12 @@ package controllers;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import model.sub.RedisSub;
+import model.handlers.HandlerPool;
 import model.handlers.SimpleWsOutPool;
+import model.sub.RedisSub;
 import model.sub.Subscriber;
 import model.sub.WebSocketSub;
-import model.handlers.HandlerPool;
+import play.Logger;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -49,13 +50,13 @@ public class Application extends Controller {
 			public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
 				// Join the chat room.
 				in.onClose(() -> {
-					System.out.println("UNREGISTERING WS...");
+					Logger.debug("UNREGISTERING WS...");
 					SimpleWsOutPool.getInstance().unregister(out);
 				});
 
 				try {
 					//Subscribe to Redis channel; to receive a message
-					System.out.println("Im ready ws=" + ws.incrementAndGet());
+					Logger.debug("Im ready ws={}", ws.incrementAndGet());
 					SimpleWsOutPool.getInstance().register(out);
 				} catch (Exception ex) {
 					ex.printStackTrace();

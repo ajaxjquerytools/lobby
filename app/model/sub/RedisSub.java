@@ -1,25 +1,22 @@
 package model.sub;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import redis.clients.jedis.Jedis;
+import play.Logger;
 import redis.clients.jedis.JedisPubSub;
 import utils.JedisUtil;
 
 public class RedisSub extends JedisPubSub {
 
-	private static Logger logger = LoggerFactory.getLogger(RedisSub.class);
-
 	@Override
 	public void onMessage(String channel, String message) {
-		System.out.println(String.format("Redis | message received. Channel: %s, Msg: %s", channel, message));
+		Logger.debug("Redis | message received. Channel: {}, Msg: {}", channel, message);
+
 		JedisUtil.doJedisCall(j -> {
-			//multinode support
-			String key = j.randomKey();
-			j.set(key, message);
-			System.out.println("Redis | key=" + key + ";value=" + j.get(key));
-		});
+			//multi node support
+				long keyIndex = j.incr("key_index");
+				String key = String.format("key%d", keyIndex);
+				j.set(key, message);
+				Logger.debug("Redis | key={};value={}", key, j.get(key));
+			});
 	}
 
 	@Override

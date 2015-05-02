@@ -1,6 +1,7 @@
 package model.sub;
 
 import model.handlers.WebSocketPool;
+import play.Logger;
 import redis.clients.jedis.JedisPubSub;
 /**
  * Created by volodymyrd on 29.04.15.
@@ -14,7 +15,7 @@ public class WebSocketSub extends JedisPubSub {
 	}
 
 	@Override public void onMessage(String channel, String message) {
-		System.out.println("WS sub | message for received message:"+message);
+		Logger.debug("WS sub | message for received message:{}", message);
 		webSocketPool.notifyMembers(message);
 	}
 

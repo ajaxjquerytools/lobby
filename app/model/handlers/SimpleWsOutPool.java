@@ -1,7 +1,5 @@
 package model.handlers;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import model.domain.Event;
