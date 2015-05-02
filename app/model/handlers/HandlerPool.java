@@ -4,6 +4,7 @@ package model.handlers;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class HandlerPool implements MessageHandler {
@@ -20,11 +21,7 @@ public class HandlerPool implements MessageHandler {
 	private List<MessageHandler> messageHandlers;
 
 	public HandlerPool() {
-		messageHandlers = new ArrayList<MessageHandler>() {
-			{
-				add(new PublishHandler());
-			}
-		};
+		messageHandlers = Arrays.asList(new PublishHandler());
 	}
 
 	@Override
