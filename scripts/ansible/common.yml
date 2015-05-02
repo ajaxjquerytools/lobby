@@ -1,0 +1,11 @@
+---
+
+- hosts: server1
+  sudo: yes
+  roles:
+     -  role: common
+     -  role: git
+     -  role: redis
+
+
+

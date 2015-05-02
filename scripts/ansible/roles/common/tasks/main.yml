@@ -1,0 +1,19 @@
+---
+
+- name: Upgrade all packages (Ubuntu)
+  apt: upgrade=yes update_cache=yes
+  when: common_upgrade
+
+- name: Install misc utils (Ubuntu)
+  apt: pkg={{ item }} state=present
+  with_items:
+  - htop
+  - curl
+  - unzip
+  - vim
+
+- name: Set vim as default editor (Ubuntu)
+  command: update-alternatives --set editor /usr/bin/vim.basic
+
+- include: java.yml
+- include: sbt.yml
