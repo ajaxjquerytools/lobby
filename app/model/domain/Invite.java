@@ -9,6 +9,15 @@ public class Invite implements Serializable {
     private String fromUser;
     private String toUser;
 
+
+    public Invite() {
+    }
+
+    public Invite(String toUser, String fromUser) {
+        this.toUser = toUser;
+        this.fromUser = fromUser;
+    }
+
     public String getFromUser() {
         return fromUser;
     }

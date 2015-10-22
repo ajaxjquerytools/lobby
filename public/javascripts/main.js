@@ -81,8 +81,10 @@ var viewModel = {
     },
 
     onInviteReceived: function (inviteData) {
-
+        console.log("INVITE RECEIVED");
+        alert("You have been invited to gameSession by user "+inviteData.fromUser);
     },
+
     onUserConnected: function (userData) {
         console.log("USER CONNECTED");
         var that = this;

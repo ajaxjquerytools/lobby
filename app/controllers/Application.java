@@ -24,7 +24,8 @@ public class Application extends Controller {
 	public static Result index() {
 		return ok(index.render("Your new application is ready."));
 	}
-    public static UserRepository userRepository = UserRepository.getInstance();
+
+	public static UserRepository userRepository = UserRepository.getInstance();
 
 	public static AtomicInteger ws = new AtomicInteger(0);
 
@@ -55,49 +56,53 @@ public class Application extends Controller {
 			public void onReady(WebSocket.In<JsonNode> in, WebSocket.Out<JsonNode> out) {
 				in.onClose(() -> {
 					Logger.debug("UNREGISTERING WS...");
+					User wsUser = SimpleWsOutPool.getInstance().getUserByWebSocket(out);
+
+					if (wsUser != null) {
+						UserRepository.getInstance().remove(wsUser);
+					}
+
 					SimpleWsOutPool.getInstance().unregister(out);
 				});
 
-                in.onMessage(callback ->{
-                    JsonNode destination = callback.get("destination");
-                   JsonNode body =  callback.get("body");
+				in.onMessage(callback -> {
+					JsonNode destination = callback.get("destination");
+					JsonNode body = callback.get("body");
 
-                    Logger.debug(callback.toString());
+					Logger.debug(callback.toString());
 
-                    switch (destination.textValue()){
-                        case "LOGIN":
-                            User user = new User(body.textValue());
-                            if(userRepository.add(user)){
-                                Logger.debug("USER ADDED TO ONLINE USERS");
-                                out.write(Json.toJson(new WsMessage<>(Event.LOGGED_IN, StatusResponse.OK, user.getUsername())));
-                                //publish event to channel
-                                HandlerPool.getInstance().send(Json.toJson(new WsMessage<>(Event.ON_USER_CONNECTED, StatusResponse.OK, user.getUsername())));
-                            }else{
-                                Logger.debug("user with username {} are already online",user.getUsername());
-                                out.write(Json.toJson(new WsMessage<>(Event.ERROR, StatusResponse.ERROR, "USER ALREADY ONLINE, TRY OTHER USER")));
-                            }
-                            break;
-                        case "GET_USERS":
-                            out.write(Json.toJson(new WsMessage<>(Event.ON_ONLINE_USERS, StatusResponse.OK, userRepository.getAll())));
-                            break;
-                        case "START_GAME":
-                            break;
-                        case "INVITE":
-                            Logger.debug("invitation sent {}", Json.fromJson(body, Invite.class));
-                        break;
-                        default:
-                            Logger.debug("NOTHING TO DO");
-                    }
+					switch (destination.textValue()) {
+						case "LOGIN":
+							User user = new User(body.textValue());
+							if (userRepository.add(user)) {
+								Logger.debug("USER ADDED TO ONLINE USERS");
+								SimpleWsOutPool.getInstance().register(user, out);
+								out.write(Json.toJson(new WsMessage<>(Event.LOGGED_IN, StatusResponse.OK, user.getUsername())));
 
-                });
+								//publish event to channel
+								HandlerPool.getInstance().send(Json.toJson(new WsMessage<>(Event.ON_USER_CONNECTED, StatusResponse.OK, user.getUsername())));
+							} else {
+								Logger.debug("user with username {} are already online", user.getUsername());
+								out.write(Json.toJson(new WsMessage<>(Event.ERROR, StatusResponse.ERROR, "USER ALREADY ONLINE, TRY OTHER USER")));
+							}
+							break;
+						case "GET_USERS":
+							out.write(Json.toJson(new WsMessage<>(Event.ON_ONLINE_USERS, StatusResponse.OK, userRepository.getAll())));
+							break;
+						case "START_GAME":
+							break;
+						case "INVITE":
+							Invite invite = Json.fromJson(body, Invite.class);
+							Logger.debug("invitation sent {}", invite);
+							WebSocket.Out<JsonNode> toWebSocket = SimpleWsOutPool.getInstance().getWebSocketByUser(new User(invite.getToUser()));
+							toWebSocket.write(Json.toJson(new WsMessage<>(Event.INVITE, StatusResponse.OK, invite)));
 
-				try {
-					//Subscribe to Redis channel; to receive a message
-					Logger.debug("Im ready ws={}", ws.incrementAndGet());
-					SimpleWsOutPool.getInstance().register(out);
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+							break;
+						default:
+							Logger.debug("NOTHING TO DO");
+					}
+
+				});
 			}
 		};
 	}

@@ -35,4 +35,8 @@ public class UserRepository {
         return users.stream().collect(Collectors.toList());
     }
 
+    public boolean remove(User user){
+        return users.remove(user);
+    }
+
 }

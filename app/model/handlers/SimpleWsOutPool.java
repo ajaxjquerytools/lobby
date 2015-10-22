@@ -1,10 +1,9 @@
 package model.handlers;
 
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import model.domain.Event;
-import model.domain.StatusResponse;
-import model.domain.WsMessage;
+import model.domain.User;
 import play.libs.Json;
 import play.mvc.WebSocket;
 
@@ -12,7 +11,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class SimpleWsOutPool implements WebSocketPool<String> {
 
-	private LinkedBlockingQueue<WebSocket.Out<JsonNode>> wsList;
+//	private LinkedBlockingQueue<WebSocket.Out<JsonNode>> wsList;
+
+	private ConcurrentHashMap<WebSocket.Out<JsonNode>, User> wsMap;
 
 	private static SimpleWsOutPool members;
 
@@ -24,22 +25,30 @@ public class SimpleWsOutPool implements WebSocketPool<String> {
 	}
 
 	private SimpleWsOutPool() {
-		this.wsList = new LinkedBlockingQueue<>();
+		this.wsMap = new ConcurrentHashMap<>();
 	}
 
 	@Override
 	public void notifyMembers(String wsMessage) {
-//        wsList.forEach(ws -> ws.write(Json.toJson(new WsMessage<>(Event.MESSAGE, StatusResponse.OK, Json.parse(message)))));
-        wsList.forEach(ws -> ws.write(Json.parse(wsMessage)));
+		wsMap.keySet().forEach(ws -> ws.write(Json.parse(wsMessage)));
 	}
 
 	@Override
 	public void unregister(WebSocket.Out wsOut) {
-		wsList.remove(wsOut);
+		wsMap.remove(wsOut);
 	}
 
 	@Override
-	public void register(WebSocket.Out wsOut) {
-		wsList.add(wsOut);
+	public void register(User user, WebSocket.Out wsOut) {
+		wsMap.put(wsOut, user);
+	}
+
+	public User getUserByWebSocket(WebSocket.Out wsOut) {
+		return wsMap.get(wsOut);
+	}
+
+	public WebSocket.Out<JsonNode> getWebSocketByUser(User user) {
+		Map.Entry<WebSocket.Out<JsonNode>, User> mapEntry = wsMap.entrySet().stream().filter(entry -> entry.getValue().equals(user)).findFirst().get();
+		return mapEntry != null ? mapEntry.getKey() : null;
 	}
 }
