@@ -9,14 +9,17 @@
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/vendor/bootstrap.css")">
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
         <script src="@routes.Assets.at("javascripts/vendor/jquery-1.11.2.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendor/underscore-min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/vendor/bootstrap.min.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/vendor/reconnecting-websocket.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/vendor/knockout-3.3.0.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/vendor/knockout.validation.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/eventDispatcher.js")" type="text/javascript"></script>
     </head>
     <body>
-        @content
 
-        <script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
+    @content
+
+    <script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
     </body>
 </html>
