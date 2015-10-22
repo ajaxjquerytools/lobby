@@ -97,7 +97,8 @@ var viewModel = {
 
     onUserDisconnected: function (userData) {
         console.log("USER DISCONNECTED="+userData);
-
+        var that = this;
+        this.onlineUsers.remove(function(item) { return item.username() == userData })
     },
     onNewGame: function (gameData) {
 
