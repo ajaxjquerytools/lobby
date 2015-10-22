@@ -7,11 +7,11 @@
     <script type="text/html" id="login_view">
         <h3>Login view</h3>
         <h5>Please Login:</h5>
-        <div class="alert alert-danger" data-bind="visible: !loginCreds.username.isValid()" role="alert">
-             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-             <span class="sr-only">Error:</span>
-              Enter login please
-        </div>
+        @*<div class="alert alert-danger" data-bind="visible: !loginCreds.username.isValid()" role="alert">*@
+             @*<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>*@
+             @*<span class="sr-only">Error:</span>*@
+              @*Enter login please*@
+        @*</div>*@
         <input type="text" class="form-control span3" data-bind="value:loginCreds.username" placeholder="Login">
         <button data-bind="click: onLoginClick">login</button>
     </script>
@@ -20,9 +20,23 @@
         <h3>Current User: <span data-bind="text: currentUser.username"></span></h3>
         <div class = "container">
             <h4>Players:</h4>
-            <ul class="list-group" data-bind="foreach: onlineUsers">
-                <li><span data-bind="text: username"></span><button class="btn-sm" data-bind="click: $parent.onInviteClick.bind($data, username())">invite</button></li>
-            </ul>
+        <div class="span4">
+        <table class="table table-hover" data-bind="visible: onlineUsers().length">
+            <thead>
+            <tr>
+                <th>username</th>
+                <th>action</th>
+            </tr>
+            </thead>
+            <tbody data-bind="foreach: onlineUsers">
+                <tr>
+                    <td data-bind="text: username"></td>
+                    <td><button class="btn-sm" data-bind="click: $parent.onInviteClick.bind($data, username())">invite</button></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
         </div>
     </script>
 
