@@ -17,33 +17,17 @@
     </script>
 
     <script type="text/html" id="game_view">
-        <h3>Games</h3>
-        <div class="span3">Users</div>
-        <div class="span4">Games</div>
-
-
+        <h3>Current User: <span data-bind="text: currentUser.username"></span></h3>
         <div class = "container">
-        <h4>Messages received:</h4>
-        <ul class="list-group" data-bind="foreach: messages">
-        <li class="list-group-item small">
-        <span class="col-lg-2" data-bind="text: $data.time.toLocaleTimeString()"></span>
-        <span class="col-lg-8" data-bind="text: JSON.stringify($data.eventData)"></span>
-        </li>
-        </ul>
-
-        <h4>Players:</h4>
+            <h4>Players:</h4>
             <ul class="list-group" data-bind="foreach: onlineUsers">
-                <li><span data-bind="text: username"></span><button class="btn-sm" data-bind="click: $parent.onInviteClick">invite</button></li>
+                <li><span data-bind="text: username"></span><button class="btn-sm" data-bind="click: $parent.onInviteClick.bind($data, username())">invite</button></li>
             </ul>
         </div>
-
-
-
     </script>
 
     <script type="text/html" id="invites_view">
         <h3>Invites</h3>
-
     </script>
 
 

@@ -3,6 +3,12 @@ function LoginCreds() {
     self.username = ko.observable().extend({required: true});
 }
 
+function Invite(){
+    var self = this;
+    self.fromUser;
+    self.toUser;
+}
+
 function User() {
     var self = this;
     self.username = ko.observable();
@@ -40,8 +46,19 @@ var viewModel = {
         }
     },
 
-    onInviteClick: function () {
-        ws.send("{\"message\": \"INVITE USER TO GAME\" }");
+    onInviteClick: function (toUser) {
+        var that = this;
+
+        console.log("WILL INVITE "+toUser);
+        var sr = new ServerRequest();
+
+        var invite = new Invite();
+        invite.fromUser = that.currentUser.username();
+        invite.toUser = toUser;
+
+        sr.destination = "LOGIN";
+        sr.body = invite
+        ws.send(JSON.stringify(sr));
     },
     //=======NAVIGAION BINDINGS======
     toInvites: function () {
@@ -56,9 +73,7 @@ var viewModel = {
     onLogged: function (userData) {
         var that = this;
         that.tplName("game_view");
-        var user = new User();
-        user.username(userData);
-        that.currentUser(user);
+        that.currentUser.username(userData);
 
         that.getUsersOnline();
         that.getAllActiveInvites();
@@ -88,9 +103,11 @@ var viewModel = {
         var that = this;
         that.onlineUsers([]);
         _.each(onlineUsers, function (user) {
-            var obsUser = new User();
-            obsUser.username(user.username);
-            that.onlineUsers.push(obsUser);
+                if(that.currentUser.username() != user.username) {
+                    var obsUser = new User();
+                    obsUser.username(user.username);
+                    that.onlineUsers.push(obsUser);
+                }
         })
     },
     onActiveInvites: function(activeInvites){
@@ -117,15 +134,7 @@ var viewModel = {
 
     registerEventHandlers: function () {
         var that = this;
-        //this.eventDispatcher.register(
-        //    "MESSAGE",
-        //    function (event) {
-        //        var jsonData = JSON.parse(event.data);
-        //        jsonData.time = new Date();
-        //        //put to the front; so new messages will be appear in the top of list
-        //        that.messages.unshift(jsonData);
-        //    }
-        //);
+
         this.eventDispatcher.register(
             "ERROR",
             function (eventData) {

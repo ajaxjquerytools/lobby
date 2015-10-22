@@ -82,17 +82,16 @@ public class Application extends Controller {
                             break;
                         case "GET_USERS":
                             out.write(Json.toJson(new WsMessage<>(Event.ON_ONLINE_USERS, StatusResponse.OK, userRepository.getAll())));
+                            break;
                         case "START_GAME":
-
                             break;
                         case "INVITE":
 
                         break;
                         default:
-                            System.out.println("NOTHING TO DO");
+                            Logger.debug("NOTHING TO DO");
                     }
 
-                    System.out.println("MESSAGE="+callback.toString());
                 });
 
 				try {
