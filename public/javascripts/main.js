@@ -96,6 +96,7 @@ var viewModel = {
     },
 
     onUserDisconnected: function (userData) {
+        console.log("USER DISCONNECTED="+userData);
 
     },
     onNewGame: function (gameData) {

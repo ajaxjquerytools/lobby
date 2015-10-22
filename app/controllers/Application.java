@@ -57,12 +57,13 @@ public class Application extends Controller {
 				in.onClose(() -> {
 					Logger.debug("UNREGISTERING WS...");
 					User wsUser = SimpleWsOutPool.getInstance().getUserByWebSocket(out);
+                    SimpleWsOutPool.getInstance().unregister(out);
 
 					if (wsUser != null) {
 						UserRepository.getInstance().remove(wsUser);
-					}
+                        HandlerPool.getInstance().send(Json.toJson(new WsMessage<>(Event.ON_USER_DISCONNECTED, StatusResponse.OK, wsUser.getUsername())));
+                    }
 
-					SimpleWsOutPool.getInstance().unregister(out);
 				});
 
 				in.onMessage(callback -> {
