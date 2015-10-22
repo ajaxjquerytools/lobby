@@ -53,10 +53,10 @@ var viewModel = {
         var sr = new ServerRequest();
 
         var invite = new Invite();
-        invite.fromUser = that.currentUser.username();
+        invite.fromUser = viewModel.currentUser.username();
         invite.toUser = toUser;
 
-        sr.destination = "LOGIN";
+        sr.destination = "INVITE";
         sr.body = invite
         ws.send(JSON.stringify(sr));
     },

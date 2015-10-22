@@ -2,10 +2,7 @@ package controllers;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import model.domain.Event;
-import model.domain.StatusResponse;
-import model.domain.User;
-import model.domain.WsMessage;
+import model.domain.*;
 import model.handlers.HandlerPool;
 import model.handlers.SimpleWsOutPool;
 import model.repository.UserRepository;
@@ -63,9 +60,9 @@ public class Application extends Controller {
 
                 in.onMessage(callback ->{
                     JsonNode destination = callback.get("destination");
-                   JsonNode body=  callback.get("body");
+                   JsonNode body =  callback.get("body");
 
-                    System.out.println(callback.toString());
+                    Logger.debug(callback.toString());
 
                     switch (destination.textValue()){
                         case "LOGIN":
@@ -86,7 +83,7 @@ public class Application extends Controller {
                         case "START_GAME":
                             break;
                         case "INVITE":
-
+                            Logger.debug("invitation sent {}", Json.fromJson(body, Invite.class));
                         break;
                         default:
                             Logger.debug("NOTHING TO DO");
