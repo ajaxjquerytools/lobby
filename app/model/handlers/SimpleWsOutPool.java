@@ -28,8 +28,9 @@ public class SimpleWsOutPool implements WebSocketPool<String> {
 	}
 
 	@Override
-	public void notifyMembers(String message) {
-		wsList.forEach(ws -> ws.write(Json.toJson(new WsMessage<>(Event.MESSAGE, StatusResponse.OK, Json.parse(message)))));
+	public void notifyMembers(String wsMessage) {
+//        wsList.forEach(ws -> ws.write(Json.toJson(new WsMessage<>(Event.MESSAGE, StatusResponse.OK, Json.parse(message)))));
+        wsList.forEach(ws -> ws.write(Json.parse(wsMessage)));
 	}
 
 	@Override

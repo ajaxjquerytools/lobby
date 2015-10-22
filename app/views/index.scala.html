@@ -33,7 +33,7 @@
 
         <h4>Players:</h4>
             <ul class="list-group" data-bind="foreach: onlineUsers">
-                <li><span data-bind="text: username"></span><button class="btn-sm" data-bind="click: onInviteClick">invite</button></li>
+                <li><span data-bind="text: username"></span><button class="btn-sm" data-bind="click: $parent.onInviteClick">invite</button></li>
             </ul>
         </div>
 

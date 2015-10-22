@@ -56,6 +56,9 @@ var viewModel = {
     onLogged: function (userData) {
         var that = this;
         that.tplName("game_view");
+        var user = new User();
+        user.username(userData);
+        that.currentUser(user);
 
         that.getUsersOnline();
         that.getAllActiveInvites();
@@ -66,7 +69,13 @@ var viewModel = {
 
     },
     onUserConnected: function (userData) {
-
+        console.log("USER CONNECTED");
+        var that = this;
+        if(that.currentUser.username() != userData){
+            var opsUser = new User();
+            opsUser.username(userData);
+            that.onlineUsers.unshift(opsUser);
+        }
     },
 
     onUserDisconnected: function (userData) {

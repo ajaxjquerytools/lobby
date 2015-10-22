@@ -73,6 +73,8 @@ public class Application extends Controller {
                             if(userRepository.add(user)){
                                 Logger.debug("USER ADDED TO ONLINE USERS");
                                 out.write(Json.toJson(new WsMessage<>(Event.LOGGED_IN, StatusResponse.OK, user.getUsername())));
+                                //publish event to channel
+                                HandlerPool.getInstance().send(Json.toJson(new WsMessage<>(Event.ON_USER_CONNECTED, StatusResponse.OK, user.getUsername())));
                             }else{
                                 Logger.debug("user with username {} are already online",user.getUsername());
                                 out.write(Json.toJson(new WsMessage<>(Event.ERROR, StatusResponse.ERROR, "USER ALREADY ONLINE, TRY OTHER USER")));
